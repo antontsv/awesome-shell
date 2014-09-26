@@ -1,0 +1,42 @@
+#!/bin/bash
+
+#
+# Help module: add automatic agrument for help
+# if help message is defined by user.
+#
+# Here is how to add help message:
+# 
+#
+#   CURRENT_SCRIPT_NAME=$(basename ${BASH_SOURCE[0]})
+#   read -d '' HELP_MESSAGE <<_HELP_
+#       Usage: $CURRENT_SCRIPT_NAME
+#
+#       Some message here that client will see if script is executed with
+#       --help or -h switches
+#
+#   _HELP_
+
+if [ ! -z "$HELP_MESSAGE" ];then
+
+    include messages
+
+    show_help(){
+        msg "$HELP_MESSAGE"
+    }
+
+    if [ -z "$arguments" ];then
+        arguments="$@"
+    fi;
+
+    for arg in "$arguments"
+    do
+        case "$arg" in
+          --help|-h)
+            show_help
+            exit 0
+          ;;
+          *)
+          ;;
+        esac
+    done
+fi

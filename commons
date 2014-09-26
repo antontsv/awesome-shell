@@ -1,0 +1,29 @@
+#!/bin/bash
+
+
+# This script is meant to be sourced
+#
+# When you source this script, than you would be able to connect various modules,
+# that can help you to add functionality to new script quickly.
+
+
+includes_list=()
+
+arguments="$@"
+include(){
+    this_file_dir=$(dirname -- "${BASH_SOURCE[0]}");
+    for include in "${includes_list[@]}"; do
+        if [ "$include" = "$@" ]; then
+            # Include only once
+            return;
+        fi;
+    done
+    includes_list+=("$@")
+    if [ -f "$@" ]; then
+        source "$@";
+    elif [ -f "$this_file_dir/shell-libs/$@" ]; then
+        source "$this_file_dir/shell-libs/$@"
+    else
+        echo "Fatal error: cannot include required file $@";
+    fi;
+}
