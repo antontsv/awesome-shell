@@ -42,3 +42,16 @@ verbose_exit_code(){
     fi;
     return $exit_code
 }
+
+# Terminate with fatal error if commod returns any error
+fatal_if_any_error(){
+    if [ $? -ne 0 ]; then
+        fatal "$@"
+    fi;
+}
+
+# Short-cut to check for required script/executable, that should reachable through the PATH
+required_utility(){
+    which -s "$@" 1>/dev/null 2>&1
+    fatal_error_if_not_successful "Wa not able to find required '$@' utility in the PATH"
+}
