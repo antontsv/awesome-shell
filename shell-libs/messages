@@ -53,5 +53,5 @@ fatal_if_any_error(){
 # Short-cut to check for required script/executable, that should reachable through the PATH
 required_utility(){
     which -s "$@" 1>/dev/null 2>&1
-    fatal_error_if_not_successful "Wa not able to find required '$@' utility in the PATH"
+    fatal_error_if_not_successful "Was not able to find required '$@' utility in the PATH"
 }
