@@ -6,23 +6,22 @@
 # When you source this script, than you would be able to connect various modules,
 # that can help you to add functionality to new script quickly.
 
+awesome_pile_commons_file_dir=$(dirname -- "${BASH_SOURCE[0]:-$_}");
+awesome_pile_includes_list=()
+awesome_pile_arguments="$@"
 
-includes_list=()
-
-arguments="$@"
-include(){
-    this_file_dir=$(dirname -- "${BASH_SOURCE[0]}");
-    for include in "${includes_list[@]}"; do
+awesome_pile_include(){
+    for include in "${awesome_pile_includes_list[@]}"; do
         if [ "$include" = "$@" ]; then
             # Include only once
             return;
         fi;
     done
-    includes_list+=("$@")
+    awesome_pile_includes_list+=("$@")
     if [ -f "$@" ]; then
         source "$@";
-    elif [ -f "$this_file_dir/shell-libs/$@" ]; then
-        source "$this_file_dir/shell-libs/$@"
+    elif [ -f "$awesome_pile_commons_file_dir/shell-libs/$@" ]; then
+        source "$awesome_pile_commons_file_dir/shell-libs/$@"
     else
         echo "Fatal error: cannot include required file $@";
     fi;

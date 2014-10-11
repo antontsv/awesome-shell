@@ -18,17 +18,17 @@
 
 if [ ! -z "$HELP_MESSAGE" ];then
 
-    include messages
+    awesome_pile_include messages
 
     show_help(){
         msg "$HELP_MESSAGE"
     }
 
-    if [ -z "$arguments" ];then
-        arguments="$@"
+    if [ -z "$awesome_pile_arguments" ];then
+        awesome_pile_arguments="$@"
     fi;
 
-    for arg in "$arguments"
+    for arg in "$awesome_pile_arguments"
     do
         case "$arg" in
           --help|-h)
