@@ -9,7 +9,7 @@
 if [ -z "$BASH_VERSION" ] && [ -z "$ZSH_VERSION" ]; then
     echo "Sorry, but awesome pile commons can be used/sourced only with bash or zsh";
 else
-    awesome_pile_commons_file_dir=$(dirname -- "${BASH_SOURCE[0]:-$_}");
+    awesome_pile_commons_file_dir=$(dirname -- "${BASH_SOURCE[0]:-$0}");
     awesome_pile_includes_list=()
     awesome_pile_arguments="$@"
 
