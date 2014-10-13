@@ -6,23 +6,27 @@
 # When you source this script, than you would be able to connect various modules,
 # that can help you to add functionality to new script quickly.
 
-awesome_pile_commons_file_dir=$(dirname -- "${BASH_SOURCE[0]:-$_}");
-awesome_pile_includes_list=()
-awesome_pile_arguments="$@"
+if [ -z "$BASH_VERSION" ] && [ -z "$ZSH_VERSION" ]; then
+    echo "Sorry, but awesome pile commons can be used/sourced only with bash or zsh";
+else
+    awesome_pile_commons_file_dir=$(dirname -- "${BASH_SOURCE[0]:-$_}");
+    awesome_pile_includes_list=()
+    awesome_pile_arguments="$@"
 
-awesome_pile_include(){
-    for include in "${awesome_pile_includes_list[@]}"; do
-        if [ "$include" = "$@" ]; then
-            # Include only once
-            return;
+    awesome_pile_include(){
+        for include in "${awesome_pile_includes_list[@]}"; do
+            if [ "$include" = "$@" ]; then
+                # Include only once
+                return;
+            fi;
+        done
+        awesome_pile_includes_list+=("$@")
+        if [ -f "$@" ]; then
+            source "$@";
+        elif [ -f "$awesome_pile_commons_file_dir/shell-libs/$@" ]; then
+            source "$awesome_pile_commons_file_dir/shell-libs/$@"
+        else
+            echo "Fatal error: cannot include required file $@";
         fi;
-    done
-    awesome_pile_includes_list+=("$@")
-    if [ -f "$@" ]; then
-        source "$@";
-    elif [ -f "$awesome_pile_commons_file_dir/shell-libs/$@" ]; then
-        source "$awesome_pile_commons_file_dir/shell-libs/$@"
-    else
-        echo "Fatal error: cannot include required file $@";
-    fi;
-}
+    }
+fi;
