@@ -9,24 +9,30 @@
 if [ -z "$BASH_VERSION" ] && [ -z "$ZSH_VERSION" ]; then
     echo "Sorry, but awesome pile commons can be used/sourced only with bash or zsh";
 else
-    awesome_pile_commons_file_dir=$(dirname -- "${BASH_SOURCE[0]:-$0}");
-    awesome_pile_includes_list=()
-    awesome_pile_arguments="$@"
+    declare -f "awesome_pile_include" > /dev/null
+    if [ $? -ne 0 ]; then
+        awesome_pile_commons_file_dir=$(dirname -- "${BASH_SOURCE[0]:-$0}");
+        awesome_pile_includes_list=()
+        awesome_pile_arguments=("$@")
 
-    awesome_pile_include(){
-        for include in "${awesome_pile_includes_list[@]}"; do
-            if [ "$include" = "$@" ]; then
-                # Include only once
-                return;
+        awesome_pile_include(){
+            if [ -z "$awesome_pile_arguments" ];then
+                awesome_pile_arguments=("$BASH_ARGV")
             fi;
-        done
-        awesome_pile_includes_list+=("$@")
-        if [ -f "$@" ]; then
-            source "$@";
-        elif [ -f "$awesome_pile_commons_file_dir/shell-libs/$@" ]; then
-            source "$awesome_pile_commons_file_dir/shell-libs/$@"
-        else
-            echo "Fatal error: cannot include required file $@";
-        fi;
-    }
+            for include in "${awesome_pile_includes_list[@]}"; do
+                if [ "$include" = "$@" ]; then
+                    # Include only once
+                    return;
+                fi;
+            done
+            awesome_pile_includes_list+=("$@")
+            if [ -f "$@" ]; then
+                source "$@";
+            elif [ -f "$awesome_pile_commons_file_dir/shell-libs/$@" ]; then
+                source "$awesome_pile_commons_file_dir/shell-libs/$@"
+            else
+                echo "Fatal error: cannot include required file $@";
+            fi;
+        }
+    fi;
 fi;

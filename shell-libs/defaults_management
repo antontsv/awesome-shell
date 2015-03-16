@@ -6,30 +6,30 @@
 
 awesome_pile_include messages
 
-
 case "$SHELL" in
     *"/bash")
-        AP_SH_RC="$HOME/.bashrc"
+        AWESOME_PILE_SH_RC="$HOME/.bashrc"
     ;;
     *"/zsh")
-        AP_SH_RC="$HOME/.zshrc"
+        AWESOME_PILE_SH_RC="$HOME/.zshrc"
     ;;
     *)
-        AP_SH_RC=""
+        AWESOME_PILE_SH_RC=""
     ;;
 esac
 
-ap_add_permanent_path(){
-    if [ -n "$AP_SH_RC" ] && [ -f "$AP_SH_RC" ]; then
-        grep -q "ap_add_path \"$@\"" "$AP_SH_RC"
-        verbose_exit_code "Adding new path to $AP_SH_RC..."
+awesome_pile_add_permanent_path(){
+    if [ -n "$AWESOME_PILE_SH_RC" ] && [ -f "$AWESOME_PILE_SH_RC" ]; then
+        grep -q "awesome_pile_add_path \"$@\"" "$AWESOME_PILE_SH_RC"
         if [ $? -ne 0 ]; then
-            echo "ap_add_path \"$@\"" >> "$AP_SH_RC"
+            echo "awesome_pile_add_path \"$@\"" >> "$AWESOME_PILE_SH_RC"
         fi;
+        grep -q "awesome_pile_add_path \"$@\"" "$AWESOME_PILE_SH_RC"
+        verbose_exit_code "Adding new path to $AWESOME_PILE_SH_RC..."
         
     fi
 }
 
-ap_add_path(){
+awesome_pile_add_path(){
     export PATH="$@:PATH"
 }

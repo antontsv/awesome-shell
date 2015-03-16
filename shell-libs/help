@@ -8,7 +8,7 @@
 # 
 #
 #   CURRENT_SCRIPT_NAME=$(basename ${BASH_SOURCE[0]})
-#   read -d '' HELP_MESSAGE <<_HELP_
+#   awesome_pile_helpma <<_HELP_
 #       Usage: $CURRENT_SCRIPT_NAME
 #
 #       Some message here that client will see if script is executed with
@@ -16,27 +16,30 @@
 #
 #   _HELP_
 
-if [ ! -z "$HELP_MESSAGE" ];then
 
-    awesome_pile_include messages
+awesome_pile_include messages
 
-    show_help(){
-        msg "$HELP_MESSAGE"
-    }
+awesome_pile_help(){
+    read -d '' -t 3 AWESOME_PILE_HELP_MESSAGE
+    [ -z "$AWESOME_PILE_HELP_MESSAGE" ] || awesome_pile_show_help_with_arg_check    
+}
 
-    if [ -z "$awesome_pile_arguments" ];then
-        awesome_pile_arguments="$@"
-    fi;
+awesome_pile_show_help(){
+    msg "$AWESOME_PILE_HELP_MESSAGE"
+}
 
+
+awesome_pile_show_help_with_arg_check(){
     for arg in "$awesome_pile_arguments"
     do
         case "$arg" in
           --help|-h)
-            show_help
+            awesome_pile_show_help
             exit 0
           ;;
           *)
           ;;
         esac
     done
-fi
+}
+
