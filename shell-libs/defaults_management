@@ -6,17 +6,31 @@
 
 awesome_pile_include messages
 
-case "$SHELL" in
-    *"/bash")
-        AWESOME_PILE_SH_RC="$HOME/.bashrc"
-    ;;
-    *"/zsh")
-        AWESOME_PILE_SH_RC="$HOME/.zshrc"
-    ;;
-    *)
-        AWESOME_PILE_SH_RC=""
-    ;;
-esac
+if [ -z "$BASH_VERSION" ];then
+    AWESOME_PILE_SH_RC="$HOME/.bashrc";
+elif [ -z "$ZSH_VERSION" ];then
+    AWESOME_PILE_SH_RC="$HOME/.zshrc"
+else
+    AWESOME_PILE_SH_RC=""
+fi;
+
+awesome_pile_install(){
+    if [ -n "$AWESOME_PILE_SH_RC" ] && [ -f "$AWESOME_PILE_SH_RC" ]; then
+        echo -n "Installing Awesome Pile Scripts to $AWESOME_PILE_SH_RC..."
+        grep -q "# Awesome Pile scripts" "$AWESOME_PILE_SH_RC"
+        if [ $? -ne 0 ]; then
+            echo >> "$AWESOME_PILE_SH_RC"
+            echo "# Awesome Pile scripts" >> "$AWESOME_PILE_SH_RC"
+            echo "if [ -x \"$awesome_pile_commons_file_dir/commons\" ];then" >> "$AWESOME_PILE_SH_RC"
+            echo "    source \"$awesome_pile_commons_file_dir/commons\";" >> "$AWESOME_PILE_SH_RC"
+            echo "fi;" >> "$AWESOME_PILE_SH_RC"
+        fi;
+        verbose_exit_code
+    else
+        fatal "Only Bash and Zsh are supported at the monent"
+    fi;
+
+}
 
 awesome_pile_add_permanent_path(){
     if [ -n "$AWESOME_PILE_SH_RC" ] && [ -f "$AWESOME_PILE_SH_RC" ]; then

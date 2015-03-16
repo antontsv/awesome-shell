@@ -11,9 +11,9 @@ if [ -z "$BASH_VERSION" ] && [ -z "$ZSH_VERSION" ]; then
 else
     declare -f "awesome_pile_include" > /dev/null
     if [ $? -ne 0 ]; then
-        awesome_pile_commons_file_dir=$(dirname -- "${BASH_SOURCE[0]:-$0}");
-        awesome_pile_includes_list=()
-        awesome_pile_arguments=("$@")
+        awesome_pile_commons_file_dir=$( cd "$( dirname "${BASH_SOURCE[0]:-$0}" )" && pwd );
+        awesome_pile_includes_list=();
+        awesome_pile_arguments=("$@");
 
         awesome_pile_include(){
             if [ -z "$awesome_pile_arguments" ];then
