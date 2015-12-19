@@ -1,5 +1,6 @@
 #!/bin/bash
 
+#install
 intall_file_dir=$( cd "$( dirname "${BASH_SOURCE[0]:-$0}" )" && pwd )
 source "$intall_file_dir/commons"
 awesome_pile_include defaults_management
