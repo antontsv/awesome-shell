@@ -5,8 +5,22 @@
 #
 
 # Messages:
+msg_inline(){
+    local msg="$*"
+    if [[ "$*" == *... ]] && [ -n "$MSG_LINE_WITH_DOTS_MIN_LEN" ];then
+        local num=$((MSG_LINE_WITH_DOTS_MIN_LEN - ${#msg}))
+        local spacer_char='.'
+        if [ $num -gt 0 ];then
+            local extra=$(printf "%0.s$spacer_char" $(seq 1 $num))
+            msg+=$extra
+        fi;
+    fi;
+    echo -n -e "$msg" >&2
+}
+
 msg(){
-    echo -e "$@" >&2
+    msg_inline "$*"
+    echo >&2
 }
 
 # Fatal error:
@@ -36,9 +50,11 @@ header(){
 verbose_exit_code(){
     exit_code=$?
     if [ $exit_code -eq 0 ]; then
-        msg "$@ ✅  Ok"
+        msg_inline "$@" 
+        msg " ✅  Ok"
     else
-        msg "$@ ❌  Failed"
+        msg_inline
+        msg " ❌  Failed"
     fi;
     return $exit_code
 }
