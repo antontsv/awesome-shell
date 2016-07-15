@@ -4,26 +4,27 @@
 # Manages defaults: manages settings in RC files
 #
 
-awesome_pile_include messages
+awesome_shell_include messages
 
 if [ -z "$BASH_VERSION" ];then
-    AWESOME_PILE_SH_RC="$HOME/.bashrc";
+    AWESOME_SH_RC="$HOME/.bashrc";
 elif [ -z "$ZSH_VERSION" ];then
-    AWESOME_PILE_SH_RC="$HOME/.zshrc"
+    AWESOME_SH_RC="$HOME/.zshrc"
 else
-    AWESOME_PILE_SH_RC=""
+    AWESOME_SH_RC=""
 fi;
 
-awesome_pile_install(){
-    if [ -n "$AWESOME_PILE_SH_RC" ] && [ -f "$AWESOME_PILE_SH_RC" ]; then
-        echo -n "Installing Awesome Pile Scripts to $AWESOME_PILE_SH_RC..."
-        grep -q "# Awesome Pile scripts" "$AWESOME_PILE_SH_RC"
+awesome_shell_install(){
+    if [ -n "$AWESOME_SH_RC" ] && [ -f "$AWESOME_SH_RC" ]; then
+        echo -n "Installing Awesome Shell Scripts to $AWESOME_SH_RC..."
+        local install_comment="# Awesome Shell scripts"
+        grep -q "$install_comment" "$AWESOME_SH_RC"
         if [ $? -ne 0 ]; then
-            echo >> "$AWESOME_PILE_SH_RC"
-            echo "# Awesome Pile scripts" >> "$AWESOME_PILE_SH_RC"
-            echo "if [ -x \"$awesome_pile_commons_file_dir/commons\" ];then" >> "$AWESOME_PILE_SH_RC"
-            echo "    source \"$awesome_pile_commons_file_dir/commons\";" >> "$AWESOME_PILE_SH_RC"
-            echo "fi;" >> "$AWESOME_PILE_SH_RC"
+            echo >> "$AWESOME_SH_RC"
+            echo "$install_comment" >> "$AWESOME_SH_RC"
+            echo "if [ -x \"$awesome_shell_commons_file_dir/commons\" ];then" >> "$AWESOME_SH_RC"
+            echo "    source \"$awesome_shell_commons_file_dir/commons\";" >> "$AWESOME_SH_RC"
+            echo "fi;" >> "$AWESOME_SH_RC"
         fi;
         verbose_exit_code
     else
@@ -32,18 +33,18 @@ awesome_pile_install(){
 
 }
 
-awesome_pile_add_permanent_path(){
-    if [ -n "$AWESOME_PILE_SH_RC" ] && [ -f "$AWESOME_PILE_SH_RC" ]; then
-        grep -q "awesome_pile_add_path \"$@\"" "$AWESOME_PILE_SH_RC"
+awesome_shell_add_permanent_path(){
+    if [ -n "$AWESOME_SH_RC" ] && [ -f "$AWESOME_SH_RC" ]; then
+        grep -q "awesome_shell_add_path \"$@\"" "$AWESOME_SH_RC"
         if [ $? -ne 0 ]; then
-            echo "awesome_pile_add_path \"$@\"" >> "$AWESOME_PILE_SH_RC"
+            echo "awesome_shell_add_path \"$@\"" >> "$AWESOME_SH_RC"
         fi;
-        grep -q "awesome_pile_add_path \"$@\"" "$AWESOME_PILE_SH_RC"
-        verbose_exit_code "Adding new path to $AWESOME_PILE_SH_RC..."
+        grep -q "awesome_shell_add_path \"$@\"" "$AWESOME_SH_RC"
+        verbose_exit_code "Adding new path to $AWESOME_SH_RC..."
         
     fi
 }
 
-awesome_pile_add_path(){
+awesome_shell_add_path(){
     export PATH="$@:PATH"
 }

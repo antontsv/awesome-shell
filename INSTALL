@@ -2,6 +2,6 @@
 
 intall_file_dir=$( cd "$( dirname "${BASH_SOURCE[0]:-$0}" )" && pwd )
 source "$intall_file_dir/commons"
-awesome_pile_include defaults_management
-awesome_pile_install
+awesome_shell_include defaults_management
+awesome_shell_install
 

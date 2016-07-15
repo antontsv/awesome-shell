@@ -1,5 +1,5 @@
-Awesome pile
-============
+Awesome shell collection
+========================
 
 Collection of utilities used in terminal
 
@@ -18,14 +18,14 @@ Usage
 
 Once installed you can use scripts and includes in
 
-* Terminal via `awesome_pile_include [name-of-the-file-in-shell-libs]`
+* Terminal via `awesome_shell_include [name-of-the-file-in-shell-libs]`
 
 * In your scripts:
 
 ```sh
 #!/bin/bash -i
-awesome_pile_include help
-awesome_pile_help <<_HELP_
+awesome_shell_include help
+awesome_shell_help <<_HELP_
 Script help to be displayed upon use of -h or --help CLI switches
 
 _HELP_
