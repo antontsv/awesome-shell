@@ -30,12 +30,12 @@ awesome_shell_show_help(){
 
 
 awesome_shell_show_help_with_arg_check(){
-    for arg in "$awesome_shell_arguments"
+    for arg in "${awesome_shell_arguments[@]}"
     do
         case "$arg" in
           --help|-h)
             awesome_shell_show_help
-            exit 0
+            exit 1
           ;;
           *)
           ;;
