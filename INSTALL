@@ -1,7 +1,37 @@
 #!/bin/bash
 
-intall_file_dir=$( cd "$( dirname "${BASH_SOURCE[0]:-$0}" )" && pwd )
-source "$intall_file_dir/commons"
-awesome_shell_include defaults_management
-awesome_shell_install
+install_file_dir=$( cd "$( dirname "${BASH_SOURCE[0]:-$0}" )" && pwd )
+source "$install_file_dir/commons"
 
+interpreter="awesome-bash"
+
+preferred_locations=(
+    "/usr/local/bin"
+    "/usr/bin"
+    "$HOME/bin"
+)
+
+awesome_shell_include messages
+
+for location in "${preferred_locations[@]}"; do
+    if [ -f "$location/$interpreter" ];then
+        msg "Found $interpreter in $location. No action required.";
+        exit 0;
+    fi;
+    msg_inline "Checking if $location good for install..."
+    [ -d "$location" ] && [ -w "$location" ] &&
+    (
+        [[ "$PATH" = "${location}:"* ]] ||
+        [[ "$PATH" = *":${location}" ]] ||
+        [[ "$PATH" = *":${location}:"* ]] ||
+        [[ "$PATH" = "${location}" ]]
+    )
+    verbose_exit_code
+    if [ $? -eq 0 ];then
+        msg_inline "Installing $interpreter interpreter into $location..."
+        ln -s "$install_file_dir/awesome-bash" "$location/awesome-bash" 2>/dev/null
+        verbose_exit_code && msg "Installed $interpreter shebang interpreter!" && exit 0
+    fi;
+done;
+
+fatal "Tried multiple locations and failed to install $interpreter."
