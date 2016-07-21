@@ -1,0 +1,14 @@
+#!/bin/bash
+
+#
+# Directory module: functions for manipulating directory/file location
+#
+
+# absolute path for directory or file
+abs_path(){
+    if [ -d "$1" ]; then
+        cd "$1" && pwd -P; # absolute path for directory
+    elif [ -f "$1" ]; then
+        cd "$(dirname "$1")" && echo "$(pwd -P)/$(basename "$1")"
+    fi;
+}
