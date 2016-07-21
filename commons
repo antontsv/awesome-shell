@@ -16,7 +16,7 @@ else
         awesome_shell_arguments=("$@");
 
         awesome_shell_include(){
-            local retries_remaining=1
+            local retries_remaining=2
             while [[ $retries_remaining -gt 0 ]];do
                 retries_remaining=$((retries_remaining -1))
                 if [ -z "${awesome_shell_arguments[@]}" ];then
