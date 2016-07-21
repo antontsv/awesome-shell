@@ -32,6 +32,8 @@ else
                 source "$awesome_shell_commons_file_dir/shell-libs/$@"
             else
                 echo "Fatal error: cannot include required file $@";
+                echo "Try to fetch latest update for awesome-shell repo";
+                exit 1;
             fi;
         }
     fi;
