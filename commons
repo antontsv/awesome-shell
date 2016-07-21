@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 
 # This script is meant to be sourced
@@ -16,25 +16,40 @@ else
         awesome_shell_arguments=("$@");
 
         awesome_shell_include(){
-            if [ -z "$awesome_shell_arguments" ];then
-                awesome_shell_arguments=("$BASH_ARGV")
-            fi;
-            for include in "${awesome_shell_includes_list[@]}"; do
-                if [ "$include" = "$@" ]; then
-                    # Include only once
-                    return;
+            local retries_remaining=1
+            while [[ $retries_remaining -gt 0 ]];do
+                retries_remaining=$((retries_remaining -1))
+                if [ -z "${awesome_shell_arguments[@]}" ];then
+                    awesome_shell_arguments=("${BASH_ARGV[@]}")
+                fi;
+                for include in "${awesome_shell_includes_list[@]}"; do
+                    if [ "$include" = "$*" ]; then
+                        # Include only once
+                        return;
+                    fi;
+                done
+                local needs_retry=0
+                if [ -f "$@" ]; then
+                    source "$@"
+                elif [ -f "$awesome_shell_commons_file_dir/shell-libs/$*" ]; then
+                    source "$awesome_shell_commons_file_dir/shell-libs/$*"
+                else
+                    needs_retry=1
+                    echo "Will try to fetch upstream repo in order to find $*";
+                    cd "$awesome_shell_commons_file_dir" && git pull origin 1>/dev/null 2>&1
+                    if [ $? -eq 0 ];then
+                        echo "awesome-shell updates have been fetched from origin";
+                    else
+                        retries_remaining=0
+                    fi;
+                fi;
+                if [ $? -eq 0 ] && [ $needs_retry -eq 0 ];then
+                    awesome_shell_includes_list+=("$*")
+                    return 0
                 fi;
             done
-            awesome_shell_includes_list+=("$@")
-            if [ -f "$@" ]; then
-                source "$@";
-            elif [ -f "$awesome_shell_commons_file_dir/shell-libs/$@" ]; then
-                source "$awesome_shell_commons_file_dir/shell-libs/$@"
-            else
-                echo "Fatal error: cannot include required file $@";
-                echo "Try to fetch latest update for awesome-shell repo";
-                exit 1;
-            fi;
+            echo "Fatal error: cannot include required file $*";
+            exit 1;
         }
     fi;
 fi;
