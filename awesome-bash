@@ -1,23 +1,63 @@
 #!/usr/bin/env bash
 
 file="${BASH_SOURCE[0]:-$0}"
+start_working_dir=$(pwd)
 while [ -h "$file" ]; do # while source is a symlink
     dir="$( cd -P "$( dirname "$file" )" && pwd )"
     file="$(readlink "$file")"
     [[ "$file" != /* ]] && file="$dir/$file" # complete dir path for relative symlinks
 done
 dir="$( cd -P "$( dirname "$file" )" && pwd )"
-          
-if [ -x "$dir/commons" ]; then
+
+# Check if specific repository revision is requested
+# Revision can be specified on the third line
+ref=""
+if [ -f "$1" ];then
+ ref_line=$(grep -m1 --color=never -o "^#awesome-shell ref:[0-9a-f]*$" "$1")
+ [ "${ref_line:0:1}" = "#" ] && ref=$(echo "$ref_line" | cut -d':' -f2)
+fi;
+
+fatal(){
+    echo "❌  Fatal error: $*"
+    exit 1
+}
+
+if [ -n "$ref" ]; then
+    cd "$dir" 1>/dev/null 2>&1 || fatal "Cannot cd into '$dir'"
+    retries_remaining=2
+    awesome_shell_commit_ref=""
+    while [[ $retries_remaining -gt 0 ]];do
+        retries_remaining=$((retries_remaining -1))
+        if [ "$(git cat-file -t "$ref" 2>/dev/null)" = "commit" ];then
+            awesome_shell_commit_ref="$ref";
+        else
+            git fetch origin 1>/dev/null 2>&1
+            if [ $? -ne 0 ];then
+                echo "Cannot fetch updates for awesome-shell";
+                retries_remaining=0;
+            fi;
+        fi;
+    done;
+    [ -z "$awesome_shell_commit_ref" ] && fatal "Cannot find requested '$ref' commit in awesome-shell repo";
+fi;
+
+
+if [ -n "$awesome_shell_commit_ref" ];then
+    commons_content=$(git show "$awesome_shell_commit_ref:commons") || fatal "Cannot find commons in '$awesome_shell_commit_ref'"
+    awesome_shell_commons_file_dir="$dir"
+    eval "$commons_content"
+elif [ -x "$dir/commons" ]; then
     source "$dir/commons"
 else
-    echo "Cannot init awesome-shell commons"
-    exit 1
+    fatal "Cannot init awesome-shell commons"
 fi
 
 if [ -f "$1" ]; then
     awesome_shell_script_path="$1"
     awesome_shell_script_name=$(basename "$1")
+    if [ -d "$start_working_dir" ];then
+        cd "$start_working_dir" || fatal "awesome-shell cannot return to starting working directory"
+    fi;
     shift # so that the name of the script in no longer in $1 position
     awesome_shell_arguments=("${@:1}")
     script=$(cat "$awesome_shell_script_path")
@@ -25,4 +65,5 @@ if [ -f "$1" ]; then
         awesome_shell_include help
     fi;
     eval "$script"
+
 fi

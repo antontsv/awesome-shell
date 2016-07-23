@@ -11,7 +11,8 @@ if [ -z "$BASH_VERSION" ] && [ -z "$ZSH_VERSION" ]; then
 else
     declare -f "awesome_shell_include" > /dev/null
     if [ $? -ne 0 ]; then
-        awesome_shell_commons_file_dir=$( cd "$( dirname "${BASH_SOURCE[0]:-$0}" )" && pwd );
+        [ -z "$awesome_shell_commons_file_dir" ] &&
+            awesome_shell_commons_file_dir=$( cd "$( dirname "${BASH_SOURCE[0]:-$0}" )" && pwd );
         awesome_shell_includes_list=();
         awesome_shell_arguments=("$@");
 
@@ -19,7 +20,7 @@ else
             local retries_remaining=2
             while [[ $retries_remaining -gt 0 ]];do
                 retries_remaining=$((retries_remaining -1))
-                if [ -z "${awesome_shell_arguments[@]}" ];then
+                if [ -z "$awesome_shell_arguments" ];then
                     awesome_shell_arguments=("${BASH_ARGV[@]}")
                 fi;
                 for include in "${awesome_shell_includes_list[@]}"; do
@@ -29,8 +30,8 @@ else
                     fi;
                 done
                 local needs_retry=0
-                if [ -f "$@" ]; then
-                    source "$@"
+                if [ -n "$awesome_shell_commit_ref" ];then
+                    lib_content=$(cd "$awesome_shell_commons_file_dir" && git show "$awesome_shell_commit_ref:shell-libs/$*") && eval "$lib_content"
                 elif [ -f "$awesome_shell_commons_file_dir/shell-libs/$*" ]; then
                     source "$awesome_shell_commons_file_dir/shell-libs/$*"
                 else
