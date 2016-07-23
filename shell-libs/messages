@@ -82,3 +82,31 @@ ask_to_confirm(){
             * ) return 1;;
     esac
 }
+
+# Pause for some time
+# thos those cases when you  display something that will happen,
+# but you want to give user some time to process information
+pause_with_delay_in_seconds(){
+    local delay
+    local spacing
+    local plural
+    local clocks
+    local clock_icon
+    local num_clocks
+    delay=$((0 + $*))
+    clocks=(🕜  🕝  🕞  🕟  🕠  🕡  🕢  🕣  🕤  🕥  🕦  🕧 )
+    num_clocks="${#clocks[@]}"
+    spacing=$(printf "%0.s " $(seq 1 $((30 + ${#delay}))))
+    if [ $delay -gt 0 ];then
+        for i in $(seq $delay 1); do
+            if [ "$i" -ne 1 ];then plural='s';else plural='';fi;
+            msg_inline "\r$spacing"
+            clock_icon=$((num_clocks - i % num_clocks - 1))
+            msg_inline "\rWaiting for $i second$plural..."
+            msg_inline "${clocks[$clock_icon]}  "
+            sleep 1
+        done
+    fi;
+    if [ $delay -ne 1 ];then plural='s';else plural='';fi;
+    verbose_exit_code "\rWaited for $delay second$plural ..."
+}
