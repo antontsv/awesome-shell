@@ -12,7 +12,7 @@ msg_inline(){
         local spacer_char='.'
         if [ $num -gt 0 ];then
             local extra
-            extra=$(printf "%0.s$spacer_char" "$(seq 1 $num)")
+            extra=$(printf "%0.s$spacer_char" $(seq 1 $num))
             msg+=$extra
         fi;
     fi;
@@ -41,7 +41,7 @@ header(){
     local message="$*"
     local num=$((14 + ${#message}))
     local line
-    line=$(printf "%0.s$HEADER_MSG_CHAR" "$(seq 1 $num)")
+    line=$(printf "%0.s$HEADER_MSG_CHAR" $(seq 1 $num))
     msg "$line"
     msg "$HEADER_MSG_CHAR$HEADER_MSG_CHAR     $message     $HEADER_MSG_CHAR$HEADER_MSG_CHAR"
     msg "$line\n"
