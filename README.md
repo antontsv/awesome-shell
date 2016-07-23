@@ -25,6 +25,7 @@ Once installed you can use scripts and includes in your scripts:
 
 ```sh
 #!/usr/bin/env awesome-bash
+
 awesome_shell_help <<_HELP_
 Script help to be displayed upon use of -h or --help CLI switches
 
@@ -39,3 +40,28 @@ verbose_exit_code
 
 Add `awesome_shell_include [name-of-the-file-in-shell-libs]`
 if you need function from specific collection/library
+
+
+If your script is stable and finalized and you do not want
+it to break due to updates to this repo, than you can lock
+down the commit version from this repo by using 'awesome-shell ref'
+as follows:
+
+```sh
+#!/usr/bin/env awesome-bash
+
+#awesome-shell ref:737c1ca
+awesome_shell_help <<_HELP_
+Script help to be displayed upon use of -h or --help CLI switches
+
+This help will produced by help module from commit
+737c1ca691d5a98652415c406a40668b25a42045
+
+_HELP_
+
+```
+If you have multiple '#awesome-shell ref:' tags, only first one is honored.
+Reference speficied in that tag affects all `awesome_shell_include`
+
+
+
