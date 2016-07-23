@@ -11,7 +11,8 @@ msg_inline(){
         local num=$((MSG_LINE_WITH_DOTS_MIN_LEN - ${#msg}))
         local spacer_char='.'
         if [ $num -gt 0 ];then
-            local extra=$(printf "%0.s$spacer_char" $(seq 1 $num))
+            local extra
+            extra=$(printf "%0.s$spacer_char" "$(seq 1 $num)")
             msg+=$extra
         fi;
     fi;
@@ -25,21 +26,22 @@ msg(){
 
 # Fatal error:
 fatal(){
-    msg "❌  Fatal error: $@"
+    msg "❌  Fatal error: $*"
     exit 1
 }
 
 # Prints command it runs and then output
 debug() {
-    msg "Running: $@"
-    "$@"
+    msg "Running: $*"
+    "$*"
 }
 
 header(){
     local HEADER_MSG_CHAR='*'
-    local message="$@"
+    local message="$*"
     local num=$((14 + ${#message}))
-    local line=$(printf "%0.s$HEADER_MSG_CHAR" $(seq 1 $num))
+    local line
+    line=$(printf "%0.s$HEADER_MSG_CHAR" "$(seq 1 $num)")
     msg "$line"
     msg "$HEADER_MSG_CHAR$HEADER_MSG_CHAR     $message     $HEADER_MSG_CHAR$HEADER_MSG_CHAR"
     msg "$line\n"
@@ -50,10 +52,10 @@ header(){
 verbose_exit_code(){
     exit_code=$?
     if [ $exit_code -eq 0 ]; then
-        msg_inline "$@" 
+        msg_inline "$*" 
         msg " ✅  Ok"
     else
-        msg_inline
+        msg_inline "$*"
         msg " ❌  Failed"
     fi;
     return $exit_code
@@ -62,12 +64,21 @@ verbose_exit_code(){
 # Terminate with fatal error if commod returns any error
 fatal_if_any_error(){
     if [ $? -ne 0 ]; then
-        fatal "$@"
+        fatal "$*"
     fi;
 }
 
 # Short-cut to check for required script/executable, that should reachable through the PATH
 required_utility(){
-    which -s "$@" 1>/dev/null 2>&1
-    fatal_if_any_error "Was not able to find required '$@' utility in the PATH"
+    which -s "$*" 1>/dev/null 2>&1
+    fatal_if_any_error "Was not able to find required '$*' utility in the PATH"
+}
+
+# Ask for user concent
+ask_to_confirm(){
+    read -r -p "$* ✋  -> [Y(es)/No]: " reply
+    case $reply in
+        [Yy]* ) return 0;;
+            * ) return 1;;
+    esac
 }
