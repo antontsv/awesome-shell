@@ -37,7 +37,7 @@ verbose_exec() {
     fi;
     msg "Running [ $* ]:"
     eval "$*"
-    verbose_exit_code "  ↪  exec return status"
+    verbose_exit_code "  ↪  exec return status..."
 }
 
 # Run command wrapped by message and command return code
