@@ -30,12 +30,35 @@ fatal(){
     exit 1
 }
 
-# Prints command it runs and then output
-debug() {
-    msg "Running: $*"
-    "$*"
+# Prints command it runs and then output status code:
+verbose_exec() {
+    if [ $# -lt 1 ];then
+        fatal "Command string is required for verbose_exec"
+    fi;
+    msg "Running [ $* ]:"
+    eval "$*"
+    verbose_exit_code "  ↪  exec return status"
 }
 
+# Run command wrapped by message and command return code
+silent_exec_with_title() {
+    if [ $# -lt 2 ];then
+        msg "A message and actual command are required as parameters for silent_exec_with_title()"
+        fatal "Bad use of silent_exec_with_title!"
+    fi;
+    msg_inline "$1..."
+    local cmd="${*:2}"
+    if ! [[ "$cmd" == *"1>"* ]];then
+        cmd="$cmd 1>/dev/null"
+    fi;
+    if ! [[ "$cmd" == *"2>"* ]];then
+        cmd="$cmd 2>/dev/null"
+    fi;
+    eval "$cmd"
+    verbose_exit_code
+}
+
+# Nice and bold message:
 header(){
     local HEADER_MSG_CHAR='*'
     local message="$*"
