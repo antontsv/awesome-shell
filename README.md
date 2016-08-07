@@ -44,13 +44,12 @@ if you need function from specific collection/library
 
 If your script is stable and finalized and you do not want
 it to break due to updates to this repo, than you can lock
-down the commit version from this repo by using 'awesome-shell ref'
+down the commit version from this repo by using '--ref'
 as follows:
 
 ```sh
-#!/usr/bin/env awesome-bash
+#!/usr/bin/env awesome-bash --ref 737c1ca
 
-#awesome-shell ref:737c1ca
 awesome_shell_help <<_HELP_
 Script help to be displayed upon use of -h or --help CLI switches
 
@@ -60,8 +59,7 @@ This help will produced by help module from commit
 _HELP_
 
 ```
-If you have multiple '#awesome-shell ref:' tags, only first one is honored.
-Reference speficied in that tag affects all `awesome_shell_include`
+Reference speficied in `--ref` option affects all `awesome_shell_include`
 
 
 
