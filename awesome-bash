@@ -8,21 +8,56 @@ while [ -h "$file" ]; do # while source is a symlink
     [[ "$file" != /* ]] && file="$dir/$file" # complete dir path for relative symlinks
 done
 dir="$( cd -P "$( dirname "$file" )" && pwd )"
-
-# Check if specific repository revision is requested
-# Revision can be specified on the third line
-ref=""
-if [ -f "$1" ];then
- ref_line=$(grep -m1 --color=never -o "^#awesome-shell ref:[0-9a-f]*$" "$1")
- [ "${ref_line:0:1}" = "#" ] && ref=$(echo "$ref_line" | cut -d':' -f2)
-fi;
+shebang_name=$(basename "$file")
 
 fatal(){
     echo "❌  Fatal error: $*"
     exit 1
 }
 
+destination_file=""
+# To track requested revision:
+ref=""
+verbose=0
+while [ $# -gt 0 ]
+do
+    opt="$1"
+    [ -f "$opt" ] && destination_file="$opt" && break
+    shift
+    case $opt in
+        --ref)
+        [ -z "$1" ] && fatal "--ref option requires a SHA1 value of desired awesome-shell repo commit to use"
+        grep -q -e '^[0-9a-f]\{5,40\}$' <<< "$1" || fatal "--ref option value does not appear to have valid SHA1 format"
+        ref="$1"
+        shift
+        ;;
+        --verbose)
+        verbose=1
+        ;;
+        --version)
+            ver=$(cd "$dir" && git log --date=short --format='awesome-shell repo %n version: %h (%ad) %n  author: %an' -1)
+            [ $? -eq 0 ] || fatal "Failed to get version information from git"
+            echo "$shebang_name is a part of $ver"
+            exit 0
+        ;;
+    esac
+done
+
+
+# Check if revision was specified in the file body [old way; deprecated]:
+if [ -z "$ref" ] && [ -f "$destination_file" ];then
+ ref_line=$(grep -m1 --color=never -o "^#awesome-shell ref:[0-9a-f]*$" "$destination_file")
+ [ "${ref_line:0:1}" = "#" ] && ref=$(echo "$ref_line" | cut -d':' -f2)
+ if [ -n "$ref" ];then
+     # perform a rewrite to use new style:
+     rewrite=$(sed -e "1 s/$shebang_name/$shebang_name --ref $ref/1" -e '/#awesome-shell ref:/d' "$destination_file")
+     echo "$rewrite" > "$destination_file"
+ fi;
+fi;
+
+
 if [ -n "$ref" ]; then
+    [ $verbose -eq 1 ] && echo "Will use awesome-shell commit '$ref'"
     cd "$dir" 1>/dev/null 2>&1 || fatal "Cannot cd into '$dir'"
     retries_remaining=2
     awesome_shell_commit_ref=""
@@ -52,11 +87,11 @@ else
     fatal "Cannot init awesome-shell commons"
 fi
 
-if [ -f "$1" ]; then
-    awesome_shell_script_path="$1"
-    awesome_shell_script_name=$(basename "$1")
+if [ -f "$destination_file" ]; then
+    awesome_shell_script_path="$destination_file"
+    awesome_shell_script_name=$(basename "$destination_file")
     if [ -d "$start_working_dir" ];then
-        cd "$start_working_dir" || fatal "awesome-shell cannot return to starting working directory"
+        cd "$start_working_dir" || fatal "awesome-shell cannot cd to starting working directory"
     fi;
     shift # so that the name of the script in no longer in $1 position
     awesome_shell_arguments=("${@:1}")
@@ -65,5 +100,4 @@ if [ -f "$1" ]; then
         awesome_shell_include help
     fi;
     eval "$script"
-
 fi
