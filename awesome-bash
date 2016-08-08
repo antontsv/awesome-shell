@@ -15,6 +15,13 @@ fatal(){
     exit 1
 }
 
+print_version_info(){
+    ver=$(cd "$dir" && git log --date=short --format='awesome-shell repo %n version: %h (%ad) %n  author: %an' -1)
+    [ $? -eq 0 ] || fatal "Failed to get version information from git"
+    echo "$shebang_name is a part of $ver"
+    exit 0
+}
+
 destination_file=""
 # To track requested revision:
 ref=""
@@ -35,15 +42,13 @@ do
         verbose=1
         ;;
         --version)
-            ver=$(cd "$dir" && git log --date=short --format='awesome-shell repo %n version: %h (%ad) %n  author: %an' -1)
-            [ $? -eq 0 ] || fatal "Failed to get version information from git"
-            echo "$shebang_name is a part of $ver"
-            exit 0
+            print_version_info
         ;;
         --update)
             cd "$dir" && git pull --quiet --rebase origin master >> /dev/null
             [ $? -eq 0 ] || fatal "Failed to pull updates from git origin"
-            exit 0
+            echo "Updated awesome-shell repo. See current version info:"
+            print_version_info
     esac
 done
 
