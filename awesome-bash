@@ -88,9 +88,10 @@ fi;
 
 if [ -n "$awesome_shell_commit_ref" ];then
     commons_content=$(git show "$awesome_shell_commit_ref:commons") || fatal "Cannot find commons in '$awesome_shell_commit_ref'"
-    awesome_shell_commons_file_dir="$dir"
+    export awesome_shell_commons_file_dir="$dir"
     eval "$commons_content"
 elif [ -x "$dir/commons" ]; then
+    # shellcheck disable=SC1090
     source "$dir/commons"
 else
     fatal "Cannot init awesome-shell commons"
@@ -99,11 +100,12 @@ fi
 if [ -f "$destination_file" ]; then
     awesome_shell_script_path="$destination_file"
     awesome_shell_script_name=$(basename "$destination_file")
+    export awesome_shell_script_name
     if [ -d "$start_working_dir" ];then
         cd "$start_working_dir" || fatal "awesome-shell cannot cd to starting working directory"
     fi;
     shift # so that the name of the script in no longer in $1 position
-    awesome_shell_arguments=("${@:1}")
+    export awesome_shell_arguments=("${@:1}")
     script=$(cat "$awesome_shell_script_path")
     if [[ "$script" == *awesome_shell_help* ]];then
         awesome_shell_include help
