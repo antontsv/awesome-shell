@@ -53,15 +53,10 @@ do
 done
 
 
-# Check if revision was specified in the file body [old way; deprecated]:
+# Check if revision was specified in the file body [alternative way]:
 if [ -z "$ref" ] && [ -f "$destination_file" ];then
  ref_line=$(grep -m1 --color=never -o "^#awesome-shell ref:[0-9a-f]*$" "$destination_file")
  [ "${ref_line:0:1}" = "#" ] && ref=$(echo "$ref_line" | cut -d':' -f2)
- if [ -n "$ref" ];then
-     # perform a rewrite to use new style:
-     rewrite=$(sed -e "1 s/$shebang_name/$shebang_name --ref $ref/1" -e '/#awesome-shell ref:/d' "$destination_file")
-     echo "$rewrite" > "$destination_file"
- fi;
 fi;
 
 
