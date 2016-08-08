@@ -63,5 +63,19 @@ _HELP_
 If you have multiple '#awesome-shell ref:' tags, only first one is honored.
 Reference speficied in that tag affects all `awesome_shell_include`
 
+Updates
+=======
+
+If you get a script that references a version that you do not have,
+that awesome-bash will try to fetch an update automatically.
+
+Also if you would like to fetch updates manually, there is a short-cut:
+```sh
+    $ awesome-bash --update
+```
+
+
+
+
 
 
