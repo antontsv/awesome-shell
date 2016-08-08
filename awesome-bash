@@ -40,6 +40,10 @@ do
             echo "$shebang_name is a part of $ver"
             exit 0
         ;;
+        --update)
+            cd "$dir" && git pull --quiet --rebase origin master >> /dev/null
+            [ $? -eq 0 ] || fatal "Failed to pull updates from git origin"
+            exit 0
     esac
 done
 
