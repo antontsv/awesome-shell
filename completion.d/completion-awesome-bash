@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+_awesome_bash_completion(){
+    local cur opts
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    opts="--verbose --version --ref --update --list-libraries"
+    COMPREPLY=($(compgen -W "$opts" -- "$cur"))
+    return 0
+}
+
+complete -F _awesome_bash_completion awesome-bash
