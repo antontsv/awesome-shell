@@ -26,6 +26,7 @@ destination_file=""
 # To track requested revision:
 ref=""
 verbose=0
+list_libraries=0
 while [ $# -gt 0 ]
 do
     opt="$1"
@@ -49,9 +50,12 @@ do
             [ $? -eq 0 ] || fatal "Failed to pull updates from git origin"
             echo "Updated awesome-shell repo. See current version info:"
             print_version_info
+        ;;
+        --list-libraries)
+        list_libraries=1
+        ;;
     esac
 done
-
 
 # Check if revision was specified in the file body [alternative way]:
 if [ -z "$ref" ] && [ -f "$destination_file" ];then
@@ -78,6 +82,28 @@ if [ -n "$ref" ]; then
         fi;
     done;
     [ -z "$awesome_shell_commit_ref" ] && fatal "Cannot find requested '$ref' commit in awesome-shell repo";
+fi;
+
+
+if [ $list_libraries -eq 1 ];then
+    ref="${awesome_shell_commit_ref:-HEAD}"
+    lib_dirname="shell-libs/"
+    cd "$dir" || fatal "Cannot cd into awesome-shell repo"
+    libs=$(git ls-tree --name-only "$ref" "$lib_dirname") || fatal "Cannot read list of libraries via git"
+    [ -z "$libs" ] && fatal "No modules available in $ref :("
+    echo
+    echo "List of available modules:"
+    echo
+    for lib in $libs;do
+        git_object_type=$(git cat-file -t "$ref":"$lib")
+        if [ "blob" = "$git_object_type" ];then
+            echo "✨  ${lib:${#lib_dirname}}"
+            content=$(git show "$ref":"$lib")
+            echo "$content" | grep --color=never '^[^ ].*()' | sed 's/{$//' | xargs -n 1 echo '↪ '
+            echo
+        fi;
+    done
+    exit 0;
 fi;
 
 

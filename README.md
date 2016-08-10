@@ -74,6 +74,11 @@ Also if you would like to fetch updates manually, there is a short-cut:
     $ awesome-bash --update
 ```
 
+To get list of available modules & functions, run
+```sh
+    $ awesome-bash --list-libraries
+```
+
 
 
 
