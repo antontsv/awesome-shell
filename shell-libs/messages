@@ -19,6 +19,11 @@ msg_inline(){
     echo -n -e "$msg" >&2
 }
 
+msg_min_len(){
+    [ -n "$1" ] && [[ $1 =~ ^[0-9]+$ ]] &&
+        MSG_LINE_WITH_DOTS_MIN_LEN="$1"
+}
+
 msg(){
     msg_inline "$*"
     echo >&2
