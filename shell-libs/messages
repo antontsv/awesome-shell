@@ -7,8 +7,9 @@
 # Messages:
 msg_inline(){
     local msg="$*"
-    if [[ "$*" == *... ]] && [ -n "$MSG_LINE_WITH_DOTS_MIN_LEN" ];then
-        local num=$((MSG_LINE_WITH_DOTS_MIN_LEN - ${#msg}))
+    local min_len="${MSG_LINE_WITH_DOTS_MIN_LEN:-50}"
+    if [[ "$*" == *... ]] && [ -n "$min_len" ];then
+        local num=$((min_len - ${#msg}))
         local spacer_char='.'
         if [ $num -gt 0 ];then
             local extra
