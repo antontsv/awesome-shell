@@ -18,10 +18,11 @@
 
 
 awesome_shell_include messages
+awesome_shell_include system
 
 awesome_shell_help(){
     read -d '' -t 3 AWESOME_SH_HELP_MESSAGE
-    [ -z "$AWESOME_SH_HELP_MESSAGE" ] || awesome_shell_show_help_with_arg_check
+    [ -z "$AWESOME_SH_HELP_MESSAGE" ] || _awesome_shell_show_help_with_arg_check
 }
 
 awesome_shell_show_help(){
@@ -29,7 +30,7 @@ awesome_shell_show_help(){
 }
 
 
-awesome_shell_show_help_with_arg_check(){
+_awesome_shell_show_help_with_arg_check(){
     for arg in "${awesome_shell_arguments[@]}"
     do
         case "$arg" in

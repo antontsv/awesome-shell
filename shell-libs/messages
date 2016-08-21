@@ -97,12 +97,6 @@ fatal_if_any_error(){
     fi;
 }
 
-# Short-cut to check for required script/executable, that should reachable through the PATH
-required_utility(){
-    which -s "$*" 1>/dev/null 2>&1
-    fatal_if_any_error "Was not able to find required '$*' utility in the PATH"
-}
-
 # Ask for user concent
 ask_to_confirm(){
     read -r -p "$* ✋  -> [Y(es)/No]: " reply

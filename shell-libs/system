@@ -1,0 +1,21 @@
+#!/bin/bash
+
+#
+# System module: functions for system commands and environment
+#
+
+awesome_shell_include messages
+
+has_command(){
+    command -v "$1"
+    verbose_exit_code "$1"
+    return $?
+}
+
+# Short-cut to check for required script/executable, that should reachable through the PATH
+required_utility(){
+    command -v "$*" >/dev/null 2>&1 || which -s "$*" >/dev/null 2>&1
+    fatal_if_any_error "Was not able to find required '$*' utility in the PATH"
+}
+
+
