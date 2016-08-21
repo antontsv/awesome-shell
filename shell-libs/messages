@@ -106,9 +106,9 @@ ask_to_confirm(){
     esac
 }
 
-# Pause for some time
-# thos those cases when you  display something that will happen,
-# but you want to give user some time to process information
+# Pause execution for those cases when you display something
+# that will happen, but you want to give user some time to think
+# and cancel the script if needed
 pause_with_delay_in_seconds(){
     local delay
     local spacing
