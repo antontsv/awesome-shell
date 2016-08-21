@@ -99,7 +99,7 @@ if [ $list_libraries -eq 1 ];then
         if [ "blob" = "$git_object_type" ];then
             echo "✨  ${lib:${#lib_dirname}}"
             content=$(git show "$ref":"$lib")
-            echo "$content" | grep --color=never '^[^ ].*()' | sed 's/{$//' | xargs -n 1 echo '↪ '
+            echo "$content" | grep --color=never '^[^_][^ ].*()' | sed 's/{$//' | xargs -n 1 echo '↪ '
             echo
         fi;
     done
