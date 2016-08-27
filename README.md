@@ -1,6 +1,9 @@
 Awesome shell collection
 ========================
 
+[![Build Status](https://img.shields.io/travis/antontsv/awesome-shell.svg?label=tests)](https://travis-ci.org/antontsv/awesome-shell)
+![MIT License](https://img.shields.io/github/license/antontsv/awesome-shell.svg?label=👍 ]
+
 This repo offers `awesome-bash` shebang
 interpreter that is passing code to `bash` as well
 offering quick one-line access to the set of libraries and functions 
