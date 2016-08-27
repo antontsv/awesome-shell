@@ -13,11 +13,14 @@ export AWESOME_BASH="$AWESOME_SHELL_REPO_DIR/awesome-bash"
 }
 
 @test 'awesome-bash --update pulls latest changes' {
+    local stashed_changes=0
+    git diff-index --quiet HEAD -- >/dev/null 2>&1 || (stashed_changes=1 && git stash)
     current_hash=$(cd "$AWESOME_SHELL_REPO_DIR" && git reset -q --hard HEAD^1 && git log --format='%h' -1)
     [[ $("$AWESOME_BASH" --version) = *"version: $current_hash"* ]]
     origin_master_hash=$(cd "$AWESOME_SHELL_REPO_DIR" && git log --format='%h' -1 origin/master)
     [ "$current_hash" != "$origin_master_hash" ]
     [[ $("$AWESOME_BASH" --update) = *"version: $origin_master_hash"* ]]
+    [ $stashed_changes -eq 0 ] || git stash apply
 }
 
 @test 'awesome-bash --list-libraries prints shell-libs files' {
