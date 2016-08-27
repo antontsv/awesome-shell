@@ -1,6 +1,6 @@
 #!/usr/bin/env bats
 
-source "${BATS_TEST_DIRNAME}/setup"
+load "${BATS_TEST_DIRNAME}/setup"
 
 @test 'awesome_shell_help add support for  -h and --help switches' {
     local script_name="validate_help"
