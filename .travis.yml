@@ -4,7 +4,7 @@ install:
   - sudo apt-get install -qq expect
   - git clone https://github.com/sstephenson/bats.git
 before_script:
-  - export PATH="${HOME}/awesome-shell/:${PATH}"
+  - export PATH=$PATH:$PWD/antontsv/awesome-shell/
 script: bats/bin/bats --tap tests/
 notifications:
   email:
