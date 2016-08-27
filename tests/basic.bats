@@ -13,14 +13,15 @@ export AWESOME_BASH="$AWESOME_SHELL_REPO_DIR/awesome-bash"
 }
 
 @test 'awesome-bash --update pulls latest changes' {
-    local stashed_changes=0
-    git diff-index --quiet HEAD -- >/dev/null 2>&1 || (stashed_changes=1 && git stash)
-    current_hash=$(cd "$AWESOME_SHELL_REPO_DIR" && git reset -q --hard HEAD^1 && git log --format='%h' -1)
-    [[ $("$AWESOME_BASH" --version) = *"version: $current_hash"* ]]
-    origin_master_hash=$(cd "$AWESOME_SHELL_REPO_DIR" && git log --format='%h' -1 origin/master)
+    local cloned_repo="$BATS_TMPDIR/cloned"
+    local cloned_awesome_bash="$cloned_repo/awesome-bash"
+    [ ! -d "$cloned_repo" ] &&  git clone "$AWESOME_SHELL_REPO_DIR" "$cloned_repo"
+    [ -x "$cloned_awesome_bash" ]
+    current_hash=$(cd "$cloned_repo" && git reset -q --hard HEAD^1 && git log --format='%h' -1)
+    [[ $("$cloned_awesome_bash" --version) = *"version: $current_hash"* ]]
+    origin_master_hash=$(cd "$cloned_repo" && git log --format='%h' -1 origin/master)
     [ "$current_hash" != "$origin_master_hash" ]
-    [[ $("$AWESOME_BASH" --update) = *"version: $origin_master_hash"* ]]
-    [ $stashed_changes -eq 0 ] || git stash apply
+    [[ $("$cloned_awesome_bash" --update) = *"version: $origin_master_hash"* ]]
 }
 
 @test 'awesome-bash --list-libraries prints shell-libs files' {
