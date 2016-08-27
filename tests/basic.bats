@@ -1,7 +1,6 @@
 #!/usr/bin/env bats
 
-export AWESOME_SHELL_REPO_DIR=$(cd "${BATS_TEST_DIRNAME}/.."; printf "$(pwd)")
-export AWESOME_BASH="$AWESOME_SHELL_REPO_DIR/awesome-bash"
+source "${BATS_TEST_DIRNAME}/setup"
 
 @test 'awesome-bash is executable' {
     [ -x "$AWESOME_BASH" ]
