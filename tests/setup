@@ -2,4 +2,3 @@
 
 export AWESOME_SHELL_REPO_DIR=$(cd "${BATS_TEST_DIRNAME}/.."; printf "$(pwd)")
 export AWESOME_BASH="$AWESOME_SHELL_REPO_DIR/awesome-bash"
-export PATH="$AWESOME_BASH:$PATH"
