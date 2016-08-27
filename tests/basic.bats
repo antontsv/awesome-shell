@@ -14,7 +14,7 @@ source "${BATS_TEST_DIRNAME}/setup"
 @test 'awesome-bash --update pulls latest changes' {
     local cloned_repo="$BATS_TMPDIR/cloned"
     local cloned_awesome_bash="$cloned_repo/awesome-bash"
-    [ ! -d "$cloned_repo" ] &&  git clone "$AWESOME_SHELL_REPO_DIR" "$cloned_repo"
+    [ ! -d "$cloned_repo" ] &&  git clone --depth=10 "$AWESOME_SHELL_REPO_DIR" "$cloned_repo"
     [ -x "$cloned_awesome_bash" ]
     current_hash=$(cd "$cloned_repo" && git reset -q --hard HEAD^1 && git log --format='%h' -1)
     [[ $("$cloned_awesome_bash" --version) = *"version: $current_hash"* ]]
