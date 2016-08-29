@@ -14,6 +14,15 @@ load "${BATS_TEST_DIRNAME}/setup"
     run $script_path
     [ "$status" -eq 0 ]
     [[ "$output" = "$test_script_body_message" ]]
+
+    # if messages module is not includes, we should see error
+    TEST_FILE_MODULES=()
+    _create_test_script_file "$script_name"
+    run $script_path
+    [ "$status" -eq 127 ]
+    [[ "$output" = *"msg_inline: command not found"* ]]
+
+
 }
 
 @test 'message module msg_inline and msg fills in messages with ellipsis' {
@@ -81,12 +90,5 @@ load "${BATS_TEST_DIRNAME}/setup"
     run $script_path
     [ "$status" -eq 0 ]
     [[ "$output" = "$test_script_body_message" ]]
-
-    # if messages module is not includes, we should see error
-    TEST_FILE_MODULES=()
-    _create_test_script_file "$script_name"
-    run $script_path
-    [ "$status" -eq 127 ]
-    [[ "$output" = *"msg_inline: command not found"* ]]
 
 }
