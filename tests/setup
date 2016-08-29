@@ -3,3 +3,32 @@
 export AWESOME_SHELL_REPO_DIR=$(cd "${BATS_TEST_DIRNAME}/.."; printf "$(pwd)")
 export AWESOME_BASH="$AWESOME_SHELL_REPO_DIR/awesome-bash"
 [[ "$PATH" = *"$AWESOME_SHELL_REPO_DIR"* ]] || export PATH="$AWESOME_SHELL_REPO_DIR:$PATH"
+
+
+_create_test_script_file(){
+    local file_name=${1:-test_awe_sh_script}
+    local file_path="$BATS_TMPDIR/$file_name"
+
+    cat > "$file_path" <<_CONTENT_
+#!/usr/bin/env awesome-bash
+
+_CONTENT_
+
+    [ -n "$TEST_FILE_HELP" ] && cat >> "$file_path" <<_HELP_CONTENT_
+awesome_shell_help <<_HELP_
+Usage: \$awesome_shell_script_name [-h|--help]
+    $TEST_FILE_HELP
+_HELP_
+
+_HELP_CONTENT_
+
+    if [ -n "$TEST_FILE_MODULES" ];then
+        for module in "${TEST_FILE_MODULES[@]}";do
+            echo "awesome_shell_include $module" >> "$file_path"
+        done;
+    fi;
+
+    [ -n "$TEST_FILE_BODY" ] && echo "$TEST_FILE_BODY" >> "$file_path"
+
+    chmod u+x "$file_path"
+}

@@ -7,18 +7,9 @@ load "${BATS_TEST_DIRNAME}/setup"
     local script_path="$BATS_TMPDIR/$script_name"
     local test_help_message='Testing help module'
     local test_script_body_message='Script Body'
-    cat > "$script_path" <<_CONTENT_
-#!/usr/bin/env awesome-bash
-
-awesome_shell_help <<_HELP_
-Usage: \$awesome_shell_script_name [-h|--help]
-    $test_help_message
-_HELP_
-
-echo '$test_script_body_message'
-
-_CONTENT_
-    chmod u+x "$script_path"
+    TEST_FILE_HELP="$test_help_message"
+    TEST_FILE_BODY="echo '$test_script_body_message'"
+    _create_test_script_file "$script_name"
     run "$script_path"
     [ "$status" -eq 0 ]
     [[ "$output" = *"$test_script_body_message"* ]]
