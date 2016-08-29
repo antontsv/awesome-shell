@@ -70,4 +70,23 @@ load "${BATS_TEST_DIRNAME}/setup"
     expected_70+=$(printf "%0.s." $(seq 1 $((70 - ${#test_script_body_message}))))
     [[ "${lines[3]}" = "$expected_70" ]]
     [[ "${lines[4]}" = "$test_script_body_message" ]]
+
+    test_script_body_message='Regular message..'
+    test_command="msg_inline '$test_script_body_message'"
+
+    TEST_FILE_BODY="$test_command"
+    _create_test_script_file "$script_name"
+
+    # Message without ellipsis gets printed as is
+    run $script_path
+    [ "$status" -eq 0 ]
+    [[ "$output" = "$test_script_body_message" ]]
+
+    # if messages module is not includes, we should see error
+    TEST_FILE_MODULES=()
+    _create_test_script_file "$script_name"
+    run $script_path
+    [ "$status" -eq 127 ]
+    [[ "$output" = *"msg_inline: command not found"* ]]
+
 }
