@@ -15,7 +15,7 @@ load "${BATS_TEST_DIRNAME}/setup"
     [ "$status" -eq 0 ]
     [[ "$output" = "$test_script_body_message" ]]
 
-    # if messages module is not includes, we should see error
+    # if messages module is not included, we should see error
     TEST_FILE_MODULES=()
     _create_test_script_file "$script_name"
     run $script_path
@@ -23,6 +23,28 @@ load "${BATS_TEST_DIRNAME}/setup"
     [[ "$output" = *"msg_inline: command not found"* ]]
 
 
+}
+
+@test 'message module supports msg_min_len from version a41195b22' {
+    local script_name="min_len_presence_script"
+    local script_path="$BATS_TMPDIR/$script_name"
+    local message="Supported!"
+    TEST_FILE_HELP=""
+    TEST_FILE_MODULES=("messages")
+    local nl=$'\n'
+    TEST_FILE_BODY="set -e${nl}msg_min_len 30${nl}msg_inline '$message'"
+    TEST_FILE_REF='a41195b22'
+
+    _create_test_script_file "$script_name"
+    run $script_path
+    [ "$status" -eq 0 ]
+    [[ "$output" = "$message" ]]
+
+    TEST_FILE_REF=$(cd $BATS_TEST_DIRNAME && git log -1 --format='%h' $TEST_FILE_REF^)
+    _create_test_script_file "$script_name"
+    run $script_path
+    [ "$status" -eq 127 ]
+    [[ "$output" = *"msg_min_len: command not found"* ]]
 }
 
 @test 'message module msg_inline and msg fills in messages with ellipsis' {

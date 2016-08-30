@@ -28,6 +28,8 @@ _HELP_CONTENT_
         done;
     fi;
 
+    [ -n "$TEST_FILE_REF" ] && echo "#awesome-shell ref:$TEST_FILE_REF" >> "$file_path"
+
     [ -n "$TEST_FILE_BODY" ] && echo "$TEST_FILE_BODY" >> "$file_path"
 
     chmod u+x "$file_path"
