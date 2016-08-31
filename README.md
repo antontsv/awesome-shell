@@ -82,6 +82,39 @@ To get list of available modules & functions, run
     $ awesome-bash --list-libraries
 ```
 
+Demo
+====
+
+Sample code
+```sh
+#!/usr/bin/env awesome-bash
+
+awesome_shell_help <<_HELP_
+This script demostrates abilities of help and messages module
+
+Usage: $awesome_shell_script_name [-h|--help]
+
+Options:
+    -h, --help this help
+
+_HELP_
+
+awesome_shell_include messages
+
+header 'Messages module showcase'
+
+silent_exec_with_title "Check if /usr/bin is writable by $USER..." '[ -w /usr/bin/ ]'
+pause_with_delay_in_seconds 3
+ask_to_confirm 'Perform github.com status check?' && \
+silent_exec_with_title 'Check if github.com is up...' 'curl -f https://github.com'
+fatal_if_any_error 'Github.com is down. Terminating script.'
+msg # just empty line
+msg "Use verbose_exec to print command, its output and return status"
+verbose_exec 'ls non-existing-file'
+header 'Have fun!'
+```
+![demo](https://cloud.githubusercontent.com/assets/4912269/18118251/8a3eef2e-6f08-11e6-91e0-66ea3f8c33df.gif)
+
 
 
 
