@@ -125,11 +125,13 @@ pause_with_delay_in_seconds(){
             if [ "$i" -ne 1 ];then plural='s';else plural='';fi;
             msg_inline "\r$spacing"
             clock_icon=$((num_clocks - i % num_clocks - 1))
-            msg_inline "\rWaiting for $i second$plural..."
-            msg_inline "${clocks[$clock_icon]}  "
+            msg_inline "\r"
+            msg_inline "Waiting for $i second$plural..."
+            msg_inline " ${clocks[$clock_icon]}  "
             sleep 1
         done
     fi;
     if [ $delay -ne 1 ];then plural='s';else plural='';fi;
-    verbose_exit_code "\rWaited for $delay second$plural ..."
+    msg_inline "\r"
+    verbose_exit_code "Waited for $delay second$plural ..."
 }
