@@ -7,8 +7,7 @@
 awesome_shell_include messages
 
 has_command(){
-    command -v "$1"
-    verbose_exit_code "$1"
+    command -v "$1" >/dev/null 2>&1
     return $?
 }
 
