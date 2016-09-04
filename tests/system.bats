@@ -39,4 +39,25 @@ load "${BATS_TEST_DIRNAME}/setup"
 
 }
 
+@test 'system has_command returns boolean value' {
+    local script_name="system_script"
+    local script_path="$BATS_TMPDIR/$script_name"
+    local test_message="Git is present"
+    TEST_FILE_HELP=""
+    TEST_FILE_MODULES=("system")
+    TEST_FILE_BODY="if has_command git;then msg '$test_message'; fi;"
+    _create_test_script_file "$script_name"
+    run $script_path
+    [ "$status" -eq 0 ]
+    [[ "$output" = "$test_message" ]]
+
+
+    test_message="something_else is not present"
+    TEST_FILE_BODY="has_command something_else || msg '$test_message'"
+    _create_test_script_file "$script_name"
+    run $script_path
+    [ "$status" -eq 0 ]
+    [[ "$output" = "$test_message" ]]
+
+}
 
