@@ -8,7 +8,7 @@ load "${BATS_TEST_DIRNAME}/setup"
     local script_path="$BATS_TMPDIR/$script_name"
     local test_message="Can use git"
     TEST_FILE_HELP=""
-    TEST_FILE_MODULES=("messages" "system")
+    TEST_FILE_MODULES=("system") # system should include "messages"
     TEST_FILE_BODY="set -e; required_utility git; msg '$test_message'"
     _create_test_script_file "$script_name"
     run $script_path
