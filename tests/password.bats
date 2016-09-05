@@ -4,6 +4,9 @@ load "${BATS_TEST_DIRNAME}/setup"
 
 
 @test 'password module keep_sudo_alive terminates if incorrect password is given' {
+    if [ -n "$SKIP_SUDO_TESTS" ] && [ "$SKIP_SUDO_TESTS" = "1" ];then
+        skip "due to SKIP_SUDO_TESTS"
+    fi
     local script_name="password_script"
     local script_path="$BATS_TMPDIR/$script_name"
     local test_script_body_message='You can use msg_inline method!'

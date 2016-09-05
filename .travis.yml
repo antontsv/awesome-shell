@@ -9,3 +9,5 @@ script: bats/bin/bats --tap tests/
 notifications:
   email:
     on_success: never
+env:
+- SKIP_SUDO_TESTS=1
