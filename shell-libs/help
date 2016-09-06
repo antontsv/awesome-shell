@@ -36,7 +36,7 @@ _awesome_shell_show_help_with_arg_check(){
         case "$arg" in
           --help|-h)
             awesome_shell_show_help
-            exit 1
+            exit 0
           ;;
           *)
           ;;
