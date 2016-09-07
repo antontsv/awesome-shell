@@ -54,6 +54,10 @@ do
         --list-libraries)
         list_libraries=1
         ;;
+        -*)
+        echo "Unknown option: $opt"
+        exit 1;
+        ;;
     esac
 done
 

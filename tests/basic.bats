@@ -39,3 +39,10 @@ source "${BATS_TEST_DIRNAME}/setup"
     ! [[ "$list" = *"$fake_lib_name"* ]]
     rm "$AWESOME_SHELL_REPO_DIR/$lib_dirname/$fake_lib_name"
 }
+
+@test 'awesome-bash is fails on unknown CLI switches' {
+    run "$AWESOME_BASH" --some-fake-switch
+    [ "$status" -eq 1 ]
+    [[ "$output" = "Unknown option: --some-fake-switch" ]]
+}
+
