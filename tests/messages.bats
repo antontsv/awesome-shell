@@ -114,3 +114,20 @@ load "${BATS_TEST_DIRNAME}/setup"
     [[ "$output" = "$test_script_body_message" ]]
 
 }
+
+@test 'message module supports fatal to terminate script' {
+    local script_name="messages_script"
+    local script_path="$BATS_TMPDIR/$script_name"
+    local test_error_message='Test error has been triggered'
+    local test_script_body_message='Should not see this message'
+    TEST_FILE_HELP=""
+    TEST_FILE_MODULES=("messages")
+    TEST_FILE_BODY="fatal '$test_error_message'; msg_inline '$test_script_body_message'"
+    _create_test_script_file "$script_name"
+    run $script_path
+    [ "$status" -eq 1 ]
+    [[ "$output" = "❌  Fatal error: $test_error_message" ]]
+}
+
+
+
