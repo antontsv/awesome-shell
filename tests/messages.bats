@@ -129,5 +129,24 @@ load "${BATS_TEST_DIRNAME}/setup"
     [[ "$output" = "❌  Fatal error: $test_error_message" ]]
 }
 
+@test 'message module supports fatal_if_any_error to terminate script' {
+    local script_name="messages_script"
+    local script_path="$BATS_TMPDIR/$script_name"
+    local test_error_message='Should not see this test error message'
+    local test_error_message2='Test error has been triggered'
+    local test_script_body_message='Should not see this message'
+    TEST_FILE_HELP=""
+    TEST_FILE_MODULES=("messages")
+    TEST_FILE_BODY="ls 1>/dev/null 2>&1; fatal_if_any_error '$test_error_message';"
+    TEST_FILE_BODY+="ls non_existent_foo 1>/dev/null 2>&1; fatal_if_any_error '$test_error_message2';"
+    TEST_FILE_BODY+="msg_inline '$test_script_body_message'"
+    _create_test_script_file "$script_name"
+    run $script_path
+    [ "$status" -eq 1 ]
+    [[ "$output" = "❌  Fatal error: $test_error_message2" ]]
+}
+
+
+
 
 
