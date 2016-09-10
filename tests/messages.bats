@@ -146,6 +146,20 @@ load "${BATS_TEST_DIRNAME}/setup"
     [[ "$output" = "❌  Fatal error: $test_error_message2" ]]
 }
 
+@test 'message module supports header function' {
+    local script_name="messages_script"
+    local script_path="$BATS_TMPDIR/$script_name"
+    local test_header_message='Some Header'
+    TEST_FILE_HELP=""
+    TEST_FILE_MODULES=("messages")
+    TEST_FILE_BODY="header '$test_header_message';"
+    _create_test_script_file "$script_name"
+    set -f # no globbing, otherwise BATS won't split lines correctly
+    run $script_path
+    [ "$status" -eq 0 ]
+    [[ "${lines[0]}" = "${lines[2]}" ]]
+    [[ "${lines[1]}" = "**     $test_header_message     **" ]]
+}
 
 
 
