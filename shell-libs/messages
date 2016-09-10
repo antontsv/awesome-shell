@@ -133,5 +133,5 @@ pause_with_delay_in_seconds(){
     fi;
     if [ $delay -ne 1 ];then plural='s';else plural='';fi;
     msg_inline "\r"
-    verbose_exit_code "Waited for $delay second$plural ..."
+    verbose_exit_code "Waited for $delay second$plural..."
 }

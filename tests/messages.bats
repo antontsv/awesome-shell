@@ -161,6 +161,30 @@ load "${BATS_TEST_DIRNAME}/setup"
     [[ "${lines[1]}" = "**     $test_header_message     **" ]]
 }
 
-
-
-
+@test 'message module supports pause_with_delay_in_seconds' {
+    local script_name="messages_script"
+    local script_path="$BATS_TMPDIR/$script_name"
+    TEST_FILE_HELP=""
+    TEST_FILE_MODULES=("messages")
+    TEST_FILE_BODY="pause_with_delay_in_seconds 2"
+    _create_test_script_file "$script_name"
+    start=$(date +%s)
+    run $script_path
+    end=$(date +%s)
+    time_taken=$((end-start))
+    oldIFS=$IFS
+    IFS=$'\n' lines_history=($(echo "$output" | tr '\r' '\n'))
+    IFS=$oldIFS
+    [ "$status" -eq 0 ]
+    [ "$time_taken" -ge 2 ]
+    # execution may take time, but should not be unseasonable:
+    [ "$time_taken" -le 4 ]
+    [[ "${lines_history[1]}" = "Waiting for 2 seconds..."* ]]
+    [[ "${lines_history[1]}" = *"..... 🕥  " ]]
+    [[ "${lines_history[3]}" = "Waiting for 1 second..."* ]]
+    [[ "${lines_history[3]}" = *"..... 🕦  " ]]
+    [[ "${lines_history[4]}" = "Waited for 2 seconds..."* ]]
+    [[ "${lines_history[4]}" = *"..... ✅  Ok" ]]
+    [[ "$output" = *"Waited for 2 seconds...."* ]]
+    [[ "$output" = *".... ✅  Ok" ]]
+}
