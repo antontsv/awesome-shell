@@ -121,7 +121,7 @@ pause_with_delay_in_seconds(){
     num_clocks="${#clocks[@]}"
     spacing=$(printf "%0.s " $(seq 1 $((30 + ${#delay}))))
     if [ $delay -gt 0 ];then
-        for i in $(seq $delay 1); do
+        for i in $(seq $delay -1 1); do
             if [ "$i" -ne 1 ];then plural='s';else plural='';fi;
             msg_inline "\r$spacing"
             clock_icon=$((num_clocks - i % num_clocks - 1))
