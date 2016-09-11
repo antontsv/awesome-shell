@@ -188,3 +188,24 @@ load "${BATS_TEST_DIRNAME}/setup"
     [[ "$output" = *"Waited for 2 seconds...."* ]]
     [[ "$output" = *".... ✅  Ok" ]]
 }
+
+@test 'message module supports silent_exec_with_title' {
+    local script_name="messages_script"
+    local script_path="$BATS_TMPDIR/$script_name"
+    local test_title="Testing ls"
+    TEST_FILE_HELP=""
+    TEST_FILE_MODULES=("messages")
+    TEST_FILE_BODY="silent_exec_with_title '$test_title' 'ls'"
+    _create_test_script_file "$script_name"
+    run $script_path
+    [ "$status" -eq 0 ]
+    [[ "$output" = "$test_title...."* ]]
+    [[ "$output" = *".... ✅  Ok" ]]
+
+    TEST_FILE_BODY="silent_exec_with_title '$test_title' 'ls non_existing'"
+    _create_test_script_file "$script_name"
+    run $script_path
+    [ "$status" -eq 1 ]
+    [[ "$output" = "$test_title...."* ]]
+    [[ "$output" = *"... ❌  Failed" ]]
+}
