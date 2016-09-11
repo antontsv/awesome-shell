@@ -202,10 +202,11 @@ load "${BATS_TEST_DIRNAME}/setup"
     [[ "$output" = "$test_title...."* ]]
     [[ "$output" = *".... ✅  Ok" ]]
 
-    TEST_FILE_BODY="silent_exec_with_title '$test_title' 'ls non_existing'"
+    test_title="Testing a failure"
+    TEST_FILE_BODY="silent_exec_with_title '$test_title' 'silent_exec_test(){ echo Something;return 2; };silent_exec_test'"
     _create_test_script_file "$script_name"
     run $script_path
-    [ "$status" -eq 1 ]
+    [ "$status" -eq 2 ]
     [[ "$output" = "$test_title...."* ]]
     [[ "$output" = *"... ❌  Failed" ]]
 }
