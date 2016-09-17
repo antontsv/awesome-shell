@@ -210,3 +210,20 @@ load "${BATS_TEST_DIRNAME}/setup"
     [[ "$output" = "$test_title...."* ]]
     [[ "$output" = *"... ❌  Failed" ]]
 }
+
+@test 'message module supports verbose_exec' {
+    local script_name="messages_script"
+    local script_path="$BATS_TMPDIR/$script_name"
+    local test_message="Testing with echo"
+    TEST_FILE_HELP=""
+    TEST_FILE_MODULES=("messages")
+    local command_to_run="echo \"$test_message\""
+    TEST_FILE_BODY="verbose_exec '$command_to_run'"
+    _create_test_script_file "$script_name"
+    run $script_path
+    [ "$status" -eq 0 ]
+    [ "${lines[0]}" = "Running [ $command_to_run ]:" ]
+    [[ "${lines[1]}" = *"$test_message"* ]]
+    [[ "${lines[2]}" = "  ↪  exec return status..."* ]]
+    [[ "${lines[2]}" = *".... ✅  Ok" ]]
+}
