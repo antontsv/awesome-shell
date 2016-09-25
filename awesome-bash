@@ -125,7 +125,16 @@ fi
 if [ -f "$destination_file" ]; then
     awesome_shell_script_path="$destination_file"
     awesome_shell_script_name=$(basename "$destination_file")
+    if [ -h "$awesome_shell_script_path" ];then
+        awesome_shell_script_abs_path=$(readlink "$awesome_shell_script_path")
+        awesome_shell_script_dir=$(dirname "$awesome_shell_script_abs_path")
+    else
+        awesome_shell_script_abs_path="$awesome_shell_script_path"
+        awesome_shell_script_dir=$(dirname "$awesome_shell_script_path")
+    fi;
     export awesome_shell_script_name
+    export awesome_shell_script_abs_path
+    export awesome_shell_script_dir
     if [ -d "$start_working_dir" ];then
         cd "$start_working_dir" || fatal "awesome-shell cannot cd to starting working directory"
     fi;
