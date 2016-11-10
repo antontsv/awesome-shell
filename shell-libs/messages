@@ -81,7 +81,7 @@ header(){
 verbose_exit_code(){
     exit_code=$?
     if [ $exit_code -eq 0 ]; then
-        msg_inline "$*" 
+        msg_inline "$*"
         msg " ✅  Ok"
     else
         msg_inline "$*"
@@ -90,7 +90,7 @@ verbose_exit_code(){
     return $exit_code
 }
 
-# Terminate with fatal error if commod returns any error
+# Terminate with fatal error if previous command returned any error
 fatal_if_any_error(){
     if [ $? -ne 0 ]; then
         fatal "$*"
