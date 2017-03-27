@@ -28,6 +28,7 @@ Once installed you can use scripts and includes in your scripts:
 
 ```sh
 #!/usr/bin/env awesome-bash
+# vim: ft=sh:
 
 awesome_shell_help <<_HELP_
 Script help to be displayed upon use of -h or --help CLI switches
@@ -40,6 +41,9 @@ msg_inline "Simple test..."
 verbose_exit_code
 
 ```
+
+`vim: ft=sh:` will help with syntax highlighting on GitHub,
+and in vim on your computer if modeline is enabled
 
 Add `awesome_shell_include [name-of-the-file-in-shell-libs]`
 if you need function from specific collection/library
