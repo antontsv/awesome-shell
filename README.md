@@ -8,6 +8,8 @@ This repo offers `awesome-bash` shebang
 interpreter that is passing code to `bash` as well
 offering quick one-line access to the set of libraries and functions 
 
+![demo](https://cloud.githubusercontent.com/assets/4912269/18118251/8a3eef2e-6f08-11e6-91e0-66ea3f8c33df.gif)
+
 Installation
 ============
 
@@ -86,10 +88,10 @@ To get list of available modules & functions, run
     $ awesome-bash --list-libraries
 ```
 
-Demo
+Example
 ====
 
-Sample code
+Preview above uses the following code snippet:
 ```sh
 #!/usr/bin/env awesome-bash
 
@@ -117,7 +119,7 @@ msg "Use verbose_exec to print command, its output and return status"
 verbose_exec 'ls non-existing-file'
 header 'Have fun!'
 ```
-![demo](https://cloud.githubusercontent.com/assets/4912269/18118251/8a3eef2e-6f08-11e6-91e0-66ea3f8c33df.gif)
+
 
 
 
