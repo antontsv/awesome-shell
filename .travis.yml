@@ -3,7 +3,9 @@ install:
   - sudo apt-get update -qq
   - sudo apt-get install -qq expect
   - git clone https://github.com/sstephenson/bats.git
-  - git fetch --unshallow --tags
+  - git clone https://github.com/$TRAVIS_REPO_SLUG.git $TRAVIS_REPO_SLUG
+  - cd $TRAVIS_REPO_SLUG
+  - git checkout -qf $TRAVIS_COMMIT
 before_script:
   - export PATH=$PATH:$PWD
 script: bats/bin/bats --tap tests/
