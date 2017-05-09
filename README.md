@@ -5,8 +5,8 @@ Awesome shell collection
 [![MIT License](https://img.shields.io/github/license/antontsv/awesome-shell.svg?label=👍 )](https://github.com/antontsv/awesome-shell/blob/master/LICENSE)
 
 This repo offers `awesome-bash` shebang
-interpreter that is passing code to `bash` as well
-offering quick one-line access to the set of libraries and functions 
+interpreter that is passing code to `bash` and
+offers quick one-line access to the set of libraries and functions
 
 ![demo](https://cloud.githubusercontent.com/assets/4912269/18118251/8a3eef2e-6f08-11e6-91e0-66ea3f8c33df.gif)
 
