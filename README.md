@@ -76,7 +76,7 @@ Updates
 =======
 
 If you get a script that references a version that you do not have,
-that awesome-bash will try to fetch an update automatically.
+than awesome-bash will try to fetch an update automatically.
 
 Also if you would like to fetch updates manually, there is a short-cut:
 ```sh
