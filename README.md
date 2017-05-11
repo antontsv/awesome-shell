@@ -75,7 +75,7 @@ Reference speficied in that tag affects all `awesome_shell_include`
 Updates
 =======
 
-If you get a script that references a version that you do not have,
+If you get a script that references a version you do not have locally,
 than awesome-bash will try to fetch an update automatically.
 
 Also if you would like to fetch updates manually, there is a short-cut:
