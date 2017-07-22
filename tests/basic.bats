@@ -28,7 +28,7 @@ source "${BATS_TEST_DIRNAME}/setup"
     local fake_lib_name="dummy-fake-library"
     [ -d "$AWESOME_SHELL_REPO_DIR/$lib_dirname" ]
     touch "$AWESOME_SHELL_REPO_DIR/$lib_dirname/$fake_lib_name"
-    libs=$(cd "$AWESOME_SHELL_REPO_DIR" && git ls-tree --name-only HEAD "$lib_dirname") 
+    libs=$(cd "$AWESOME_SHELL_REPO_DIR" && git ls-tree --name-only HEAD "$lib_dirname")
     list=$("$AWESOME_BASH" --list-libraries)
     [ -n "$list" ]
     [ -n "$libs" ]
@@ -40,7 +40,7 @@ source "${BATS_TEST_DIRNAME}/setup"
     rm "$AWESOME_SHELL_REPO_DIR/$lib_dirname/$fake_lib_name"
 }
 
-@test 'awesome-bash is fails on unknown CLI switches' {
+@test 'awesome-bash fails on unknown CLI switches' {
     run "$AWESOME_BASH" --some-fake-switch
     [ "$status" -eq 1 ]
     [[ "$output" = "Unknown option: --some-fake-switch" ]]
