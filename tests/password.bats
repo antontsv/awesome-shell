@@ -16,7 +16,7 @@ load "${BATS_TEST_DIRNAME}/setup"
     _create_test_script_file "$script_name"
     out=$(cat <<EXPCT | expect -f -
      set timeout 2
-     spawn $script_path 
+     spawn $script_path
      for {set i 0} {\$i < 3} {incr i} {
       expect "password" {} default {exit 3}
       send "wrong password\n"
