@@ -20,11 +20,11 @@ load "${BATS_TEST_DIRNAME}/setup"
     [ "${lines[1]}" = "    $test_help_message" ]
     [[ "$output" != *"$test_script_body_message"* ]]
     local h_output="$output"
-    
+
     run $script_path --help
     [ "$status" -eq 0 ]
     [ -n "$output" ]
     [ "$output" = "$h_output" ]
-    
+
 }
 

@@ -63,8 +63,8 @@ load "${BATS_TEST_DIRNAME}/setup"
     [ "$status" -eq 0 ]
     expected_default="$test_script_body_message"
     expected_default+=$(printf "%0.s." $(seq 1 $((50 - ${#test_script_body_message}))))
-    [[ "$output" = "$expected_default" ]]    
-     
+    [[ "$output" = "$expected_default" ]]
+
     # Expected message filled-in with dots up to a declared min len of 60
     run $script_path
     nl=$'\n'
@@ -74,8 +74,8 @@ load "${BATS_TEST_DIRNAME}/setup"
     [ "$status" -eq 0 ]
     expected_60="$test_script_body_message"
     expected_60+=$(printf "%0.s." $(seq 1 $((60 - ${#test_script_body_message}))))
-    [[ "$output" = "$expected_60" ]]    
-    
+    [[ "$output" = "$expected_60" ]]
+
     # For long messages we should output as is
     len=$((${#test_script_body_message} -1))
     run $script_path
