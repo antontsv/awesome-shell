@@ -116,6 +116,7 @@ pause_with_delay_in_seconds(){
     local clocks
     local clock_icon
     local num_clocks
+    local i
     delay=$((0 + $*))
     clocks=(🕜  🕝  🕞  🕟  🕠  🕡  🕢  🕣  🕤  🕥  🕦  🕧 )
     num_clocks="${#clocks[@]}"
