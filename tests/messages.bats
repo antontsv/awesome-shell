@@ -189,6 +189,18 @@ load "${BATS_TEST_DIRNAME}/setup"
     [[ "$output" = *".... ✅  Ok" ]]
 }
 
+@test 'message module pause_with_delay_in_seconds does not affect outer variable i' {
+    local script_name="messages_script"
+    local script_path="$BATS_TMPDIR/$script_name"
+    TEST_FILE_HELP=""
+    TEST_FILE_MODULES=("messages")
+    TEST_FILE_BODY="i=10; pause_with_delay_in_seconds 1 1>/dev/null 2>&1; msg \"External counter \$i\";"
+    _create_test_script_file "$script_name"
+    run $script_path
+    [ "$status" -eq 0 ]
+    [[ "$output" = "External counter 10" ]]
+}
+
 @test 'message module supports silent_exec_with_title' {
     local script_name="messages_script"
     local script_path="$BATS_TMPDIR/$script_name"
