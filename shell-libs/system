@@ -17,4 +17,17 @@ required_utility(){
     fatal_if_any_error "Was not able to find required '$*' utility in the PATH"
 }
 
-
+get_existing_tmp_dir(){
+    locations=(
+        "/var/tmp"
+        "/tmp"
+        "$TMPDIR"
+    )
+    for location in "${locations[@]}"; do
+        if [ -w "$location" ];then
+            echo "$location";
+            return 0;
+        fi;
+    done;
+    fatal "Cannot find valid temporary directory"
+}

@@ -61,3 +61,22 @@ load "${BATS_TEST_DIRNAME}/setup"
 
 }
 
+@test 'system get_existing_tmp_dir get writable dir' {
+    local script_name="system_script"
+    local script_path="$BATS_TMPDIR/$script_name"
+    local test_message="checked dir is writable"
+    TEST_FILE_HELP=""
+    TEST_FILE_MODULES=("system")
+    TEST_FILE_BODY="set -e; dir=\$(get_existing_tmp_dir); [ -w \"\$dir\" ] && msg '$test_message'"
+    _create_test_script_file "$script_name"
+    run $script_path
+    [ "$status" -eq 0 ]
+    [[ "$output" = "$test_message" ]]
+
+    TEST_FILE_MODULES=()
+    _create_test_script_file "$script_name"
+    run $script_path
+    [ "$status" -eq 127 ]
+    [[ "$output" = *"get_existing_tmp_dir: command not found"* ]]
+
+}
