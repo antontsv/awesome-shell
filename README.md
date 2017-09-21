@@ -23,6 +23,17 @@ This will try to install awesome-bash into one of
 It will perform install if one of these locations are
 in your `PATH`
 
+Get started
+===
+Start new script using pre-defined stub:
+
+```sh
+awesome-bash --generate-stub > newscript
+chmod +x newscript
+```
+
+Than edit `newscript` to add new functionality
+
 Usage
 =====
 
@@ -119,10 +130,3 @@ msg "Use verbose_exec to print command, its output and return status"
 verbose_exec 'ls non-existing-file'
 header 'Have fun!'
 ```
-
-
-
-
-
-
-
