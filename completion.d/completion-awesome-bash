@@ -3,7 +3,7 @@
 _awesome_bash_completion(){
     local cur opts
     cur="${COMP_WORDS[COMP_CWORD]}"
-    opts="--verbose --version --ref --update --list-libraries"
+    opts="--verbose --version --ref --update --list-libraries --generate-stub"
     COMPREPLY=($(compgen -W "$opts" -- "$cur"))
     return 0
 }

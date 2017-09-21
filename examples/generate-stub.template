@@ -1,0 +1,11 @@
+#!/usr/bin/env awesome-bash
+# vim: ft=sh:
+
+awesome_shell_help <<_HELP_
+Usage: $awesome_shell_script_name [-h|--help]
+
+_HELP_
+
+#awesome-shell ref:HEAD_REF
+
+awesome_shell_include messages

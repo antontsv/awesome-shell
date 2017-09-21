@@ -22,6 +22,16 @@ print_version_info(){
     exit 0
 }
 
+generate_stub(){
+    awesome_shell_ref=$(cd "$dir" && git rev-parse --short HEAD)
+    [ $? -eq 0 ] || fatal "Failed to get version information from git"
+    stub="$dir/examples/generate-stub.template"
+    [ -f "$stub" ] || fatal "Cannot find generate stub file in examples"
+    data=$(cat "$stub" | sed "s/HEAD_REF/$awesome_shell_ref/g")
+    echo "$data"
+    exit 0
+}
+
 destination_file=""
 # To track requested revision:
 ref=""
@@ -53,6 +63,9 @@ do
         ;;
         --list-libraries)
         list_libraries=1
+        ;;
+        --generate-stub)
+            generate_stub
         ;;
         -*)
         echo "Unknown option: $opt"
