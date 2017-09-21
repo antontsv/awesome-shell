@@ -1,0 +1,16 @@
+#!/usr/bin/env awesome-bash
+# vim: ft=sh:
+
+awesome_shell_help <<_HELP_
+Simple hello world script to demo messaging library
+
+Usage: $awesome_shell_script_name [-h|--help]
+
+_HELP_
+
+#awesome-shell ref:3844c65
+
+awesome_shell_include messages
+
+header 'Hello World demo'
+silent_exec_with_title 'Check awesome-bash is executable' [ -x awesome-bash ]
