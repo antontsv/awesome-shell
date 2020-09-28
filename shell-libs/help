@@ -27,6 +27,7 @@ awesome_shell_help(){
 
 awesome_shell_show_help(){
     msg "$AWESOME_SH_HELP_MESSAGE"
+    exit 0
 }
 
 
@@ -36,7 +37,6 @@ _awesome_shell_show_help_with_arg_check(){
         case "$arg" in
           --help|-h)
             awesome_shell_show_help
-            exit 0
           ;;
           *)
           ;;
